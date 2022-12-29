@@ -1,0 +1,8 @@
+prefix=/home/dev/mocapfly_ws/devel/.private/mocap_simulator
+
+Name: mocap_simulator
+Description: Description of mocap_simulator
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

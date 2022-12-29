@@ -1,0 +1,1 @@
+/home/dev/mocapfly_ws/devel/.private/mocap_simulator/lib/pkgconfig/mocap_simulator.pc

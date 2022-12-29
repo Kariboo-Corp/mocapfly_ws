@@ -1,0 +1,1 @@
+/home/dev/mocapfly_ws/devel/.private/global_planner/share/roseus/ros/global_planner/msg/PathWithRiskMsg.l

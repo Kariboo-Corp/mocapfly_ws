@@ -1,4 +1,4 @@
-prefix=/home/dev/catkin_ws/devel/.private/offboard_py
+prefix=/home/dev/mocapfly_ws/devel/.private/offboard_py
 
 Name: offboard_py
 Description: Description of offboard_py

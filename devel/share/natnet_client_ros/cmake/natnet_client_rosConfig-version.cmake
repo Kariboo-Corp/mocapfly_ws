@@ -1,0 +1,1 @@
+/home/dev/mocapfly_ws/devel/.private/natnet_client_ros/share/natnet_client_ros/cmake/natnet_client_rosConfig-version.cmake

@@ -1,0 +1,1 @@
+/home/dev/mocapfly_ws/devel/.private/global_planner/share/gennodejs/ros/global_planner/_index.js

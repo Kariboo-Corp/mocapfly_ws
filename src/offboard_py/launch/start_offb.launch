@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 <launch>
+
+	<!--
 	<arg name="fcu_url" default="/dev/ttyUSB0:921600" />
 	<arg name="gcs_url" default="udp://:14550@127.0.0.1:14557"/> 
 	<arg name="tgt_system" default="1" />
@@ -16,6 +18,89 @@
 		<arg name="tgt_component" value="$(arg tgt_component)" />
 		<arg name="log_output" value="$(arg log_output)" />
 	</include>
+
+
+	<arg name="config_file" default="$(find natnet_client_ros)/config/config.yaml" />
+
+	<node pkg="natnet_client_ros" type="natnet_client_node.py" name="natnet_client_node" output="screen">
+		<rosparam file="$(arg config_file)" command="load" />
+	</node>
+
+
+	<include file="$(find px4)/launch/mavros_posix_sitl.launch"></include>
+	-->
+
+	<!-- 
+	<arg name="world_file_name"    default="simple_obstacle" />
+	<arg name="world_path" default="$(find avoidance)/sim/worlds/$(arg world_file_name).world" />
+	<arg name="pointcloud_topics" default="[/stereo/points2]"/>
+
+	<include file="$(find avoidance)/launch/avoidance_sitl_stereo.launch" >
+		<arg name="model" value="iris_stereo_camera" />
+		<arg name="world_path" value="$(arg world_path)" />
+		<arg name="pointcloud_topics" value="$(arg pointcloud_topics)"/>
+	</include>
+
+	<env name="ROSCONSOLE_CONFIG_FILE" value="$(find local_planner)/resource/custom_rosconsole.conf"/>
+
+	<node name="local_planner_node" pkg="local_planner" type="local_planner_node" output="screen" >
+		<param name="goal_x_param" value="15" />
+		<param name="goal_y_param" value="15"/>
+		<param name="goal_z_param" value="4" />
+		<param name="world_name" value="$(find avoidance)/sim/worlds/$(arg world_file_name).yaml" />
+		<rosparam param="pointcloud_topics" subst_value="True">$(arg pointcloud_topics)</rosparam>
+	</node> 
+
+	<node name="rviz" pkg="rviz" type="rviz" output="screen" args="-d $(find local_planner)/resource/local_planner.rviz" />
+
+	<node name="image_view" pkg="image_view" type="stereo_view" output="screen" args="stereo:=/stereo image:=/image_rect_color" />
+	<node name="transform" pkg="topic_tools" type="transform" args="/stereo/disparity /stereo/disparity_image sensor_msgs/Image 'm.image'" /> 
+	-->
+
+	<arg name="world_file_name"    default="simple_obstacle" />
+	<arg name="world_path" default="$(find avoidance)/sim/worlds/$(arg world_file_name).world" />
+	<arg name="pointcloud_topics" default="[/stereo/points2]"/>
+
+	<include file="$(find avoidance)/launch/avoidance_sitl_stereo.launch" >
+		<arg name="model" value="iris_stereo_camera" />
+		<arg name="world_path" value="$(arg world_path)" />
+		<arg name="pointcloud_topics" value="$(arg pointcloud_topics)"/>
+	</include>
+
+	<env name="ROSCONSOLE_CONFIG_FILE" value="$(find local_planner)/resource/custom_rosconsole.conf"/>
+
+	<node name="local_planner_node" pkg="local_planner" type="local_planner_node" output="screen" >
+		<param name="goal_x_param" value="15" />
+		<param name="goal_y_param" value="15"/>
+		<param name="goal_z_param" value="4" />
+		<param name="world_name" value="$(find avoidance)/sim/worlds/$(arg world_file_name).yaml" />
+		<rosparam param="pointcloud_topics" subst_value="True">$(arg pointcloud_topics)</rosparam>
+	</node> 
+
+	<node pkg="mocap_simulator"
+		type="mocap_simulator_node.py"
+		name="vrpn_client_node"
+		output="screen">
+		<param name="frame_rate" value="100"/>
+		<param name="publish_tf" value="true"/>
+		<param name="fixed_frame_id" value="local_origin"/>
+		<rosparam param="model_list">[]</rosparam>
+	</node>
+
+
+	<!-- mavros gcs_bridge _gcs_url:='udp://@172.16.254.129' -->
+	
+	<node pkg="mavros" type="gcs_bridge" name="qgroundcontrol" output="screen" args="_gcs_url:='udp://@172.16.254.129'"/>
+	<node name="rviz" pkg="rviz" type="rviz" output="screen" args="-d $(find local_planner)/resource/local_planner.rviz" />
+
+	<node pkg="topic_tools" type="relay" name="mocap_relay_mavros" output="screen" args="/vrpn_client_node/iris_obs_avoid/pose /mavros/vision_pose/pose"/>
+	<node pkg="topic_tools" type="relay" name="mocap_relay_avoidance" output="screen" args="/vrpn_client_node/iris_obs_avoid/pose /mocap/pose"/>
+
+	<node name="image_view" pkg="image_view" type="stereo_view" output="screen" args="stereo:=/stereo image:=/image_rect_color" />
+	<node name="transform" pkg="topic_tools" type="transform" args="/stereo/disparity /stereo/disparity_image sensor_msgs/Image 'm.image'" />
+
+    
 	<!-- Our node to control the drone -->
 	<node pkg="offboard_py" type="offb_node.py" name="offb_node_py" required="true" output="screen" />
+
 </launch>

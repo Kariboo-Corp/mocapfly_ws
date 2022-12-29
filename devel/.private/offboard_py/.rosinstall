@@ -1,2 +1,2 @@
 - setup-file:
-    local-name: /home/dev/catkin_ws/devel/.private/offboard_py/setup.sh
+    local-name: /home/dev/mocapfly_ws/devel/.private/offboard_py/setup.sh
